@@ -1,5 +1,9 @@
 package main
 
+/** 
+ * Source code modified from: https://blog.yessure.org/index.php/archives/203
+ */
+
 import (
     "bytes"
     "encoding/json"
@@ -25,6 +29,7 @@ var (
     plancode    = os.Getenv("PLANCODE")         // 需要购买的产品的planCode, e.g. 25skleb01
     optionsenv  = os.Getenv("OPTIONS")          // 选择的配置用逗号分隔, e.g. bandwidth-300-25skle,ram-32g-ecc-2400-25skle,softraid-2x450nvme-25skle
     autopay     = os.Getenv("AUTOPAY")          // 是否自动支付, e.g. true
+	frequency	= os.Getenv("FREQUENCY")		// 检查频率单位为秒, e.g. 5
 )
 
 var bought = false                              // 是否已购买, 避免os.Exit(0)出错
@@ -81,7 +86,7 @@ func runTask() {
         return
     }
 
-    msg_available := fmt.Sprintf("Found %s available at %s", plancode, datacenter)
+    msg_available := fmt.Sprintf("🔥 有货: %s 在 %s 地区", plancode, datacenter)
     sendTelegramMsg(tgtoken, tgchatid, msg_available)
 
     fmt.Println("Create cart")
@@ -207,7 +212,7 @@ func runTask() {
     }
     log.Println("Ordered!")
 	bought = true
-    msg_ordered := fmt.Sprintf("Ordered %s at %s!", plancode, datacenter)
+    msg_ordered := fmt.Sprintf("🎉 订购成功: %s 在 %s 地区", datacenter, plancode)
     sendTelegramMsg(tgtoken, tgchatid, msg_ordered)
     os.Exit(0)
 }
@@ -238,10 +243,15 @@ func sendTelegramMsg(botToken, chatID, message string) error {
 }
 
 func main() {
+    freq, err := strconv.Atoi(frequency)
+    if err != nil {
+        fmt.Println("Error converting frequency:", err)
+        return
+    }
     for {
         if (bought == false) {
 			runTask()
 		}
-        time.Sleep(20 * time.Second)
+        time.Sleep(time.Duration(freq) * time.Second)
     }
 }

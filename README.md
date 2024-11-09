@@ -21,6 +21,7 @@ docker run -e APP_KEY="ovh_appkey" \
            -e PLANCODE="product_plancode" \
            -e OPTIONS="product_options" \
            -e AUTOPAY=true \
+           -e FREQUENCY=5 \
            katorly/ovh-auto-buy:latest
 ```
 
@@ -41,4 +42,5 @@ services:
       PLANCODE: "product_plancode"      # 需要购买的产品的planCode, e.g. 25skleb01
       OPTIONS: "product_options"        # 选择的配置, e.g. bandwidth-300-25skle,ram-32g-ecc-2400-25skle,softraid-2x450nvme-25skle
       AUTOPAY: true                     # 是否自动支付, e.g. true
+      FREQUENCY: 5                      # 检查频率单位为秒, e.g. 5
 ```
