@@ -19,21 +19,21 @@ import (
 )
 
 var (
-    appKey      = os.Getenv("APP_KEY")			// OVH的应用key
-    appSecret   = os.Getenv("APP_SECRET")		// OVH的应用secret
-    consumerKey = os.Getenv("CONSUMER_KEY")		// OVH的消费者key
-    region      = os.Getenv("REGION")			// 区域设置为, e.g. ovh-eu
-    tgtoken     = os.Getenv("TG_TOKEN")			// 你的Telegram Bot Token
-    tgchatid    = os.Getenv("TG_CHATID")		// 你希望发送消息的Telegram Chat ID
-    zone        = os.Getenv("ZONE")				// OVH子公司区域设置, e.g. IE
-    plancode    = os.Getenv("PLANCODE")         // 需要购买的产品的planCode, e.g. 25skleb01
-    optionsenv  = os.Getenv("OPTIONS")          // 选择的配置用逗号分隔, e.g. bandwidth-300-25skle,ram-32g-ecc-2400-25skle,softraid-2x450nvme-25skle
-    autopay     = os.Getenv("AUTOPAY")          // 是否自动支付, e.g. true
-	frequency	= os.Getenv("FREQUENCY")		// 检查频率单位为秒, e.g. 5
-    skippedDatacenters = os.Getenv("SKIPPED_DATACENTERS") // Datacenters to skip, e.g. bhs,gra
+    appKey      = os.Getenv("APP_KEY")			// OVH Application Key
+    appSecret   = os.Getenv("APP_SECRET")		// OVH Application Secret
+    consumerKey = os.Getenv("CONSUMER_KEY")		// OVH Consumer Key
+    region      = os.Getenv("REGION")			// Region setting, e.g., ovh-eu
+    tgtoken     = os.Getenv("TG_TOKEN")			// Your Telegram Bot Token
+    tgchatid    = os.Getenv("TG_CHATID")		// The Telegram Chat ID where you want to send messages
+    zone        = os.Getenv("ZONE")				// OVH subsidiary region setting, e.g., IE
+    plancode    = os.Getenv("PLANCODE")         // The planCode for the product you need to purchase, e.g., 25skleb01
+    optionsenv  = os.Getenv("OPTIONS")          // Selected configurations, comma-separated, e.g., bandwidth-300-25skle,ram-32g-ecc-2400-25skle,softraid-2x450nvme-25skle
+    autopay     = os.Getenv("AUTOPAY")          // Whether to enable autopay, e.g., true
+	frequency	= os.Getenv("FREQUENCY")		// Check frequency in seconds, e.g., 5
+    skippedDatacenters = os.Getenv("SKIPPED_DATACENTERS") // Datacenters to skip, e.g., bhs,gra
 )
 
-var bought = false                              // 是否已购买, 避免os.Exit(0)出错
+var bought = false                              // Whether the purchase has been made, to prevent errors with os.Exit(0)
 
 func runTask() {
 
@@ -94,7 +94,7 @@ func runTask() {
         return
     }
 
-    msg_available := fmt.Sprintf("🔥 有货: %s 在 %s 地区", plancode, datacenter)
+    msg_available := fmt.Sprintf("🔥 Available: %s in %s region", plancode, datacenter)
     sendTelegramMsg(tgtoken, tgchatid, msg_available)
 
     fmt.Println("Create cart")
@@ -220,7 +220,7 @@ func runTask() {
     }
     log.Println("Ordered!")
 	bought = true
-    msg_ordered := fmt.Sprintf("🎉 订购成功: %s 在 %s 地区", datacenter, plancode)
+    msg_ordered := fmt.Sprintf("🎉 Order successful: %s in %s region", datacenter, plancode)
     sendTelegramMsg(tgtoken, tgchatid, msg_ordered)
     os.Exit(0)
 }
