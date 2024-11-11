@@ -30,6 +30,7 @@ var (
     optionsenv  = os.Getenv("OPTIONS")          // 选择的配置用逗号分隔, e.g. bandwidth-300-25skle,ram-32g-ecc-2400-25skle,softraid-2x450nvme-25skle
     autopay     = os.Getenv("AUTOPAY")          // 是否自动支付, e.g. true
 	frequency	= os.Getenv("FREQUENCY")		// 检查频率单位为秒, e.g. 5
+    skippedDatacenters = os.Getenv("SKIPPED_DATACENTERS") // Datacenters to skip, e.g. bhs,gra
 )
 
 var bought = false                              // 是否已购买, 避免os.Exit(0)出错
@@ -49,6 +50,7 @@ func runTask() {
         return
     }
 
+    skipList := strings.Split(skippedDatacenters, ",")
     foundAvailable := false
     var fqn, planCode, datacenter string
 
@@ -67,6 +69,12 @@ func runTask() {
                 fmt.Printf("Availability: %s\n", availability)
                 fmt.Printf("Datacenter: %s\n", datacenter)
                 fmt.Println("------------------------")
+
+                if shouldSkipDatacenter(datacenter, skipList) {
+                    fmt.Printf("Skipping datacenter %s as it's in the skip list\n", datacenter)
+                    fmt.Println("------------------------------------------------")
+                    continue
+                }
 
                 if availability != "unavailable" {
                     foundAvailable = true
@@ -215,6 +223,15 @@ func runTask() {
     msg_ordered := fmt.Sprintf("🎉 订购成功: %s 在 %s 地区", datacenter, plancode)
     sendTelegramMsg(tgtoken, tgchatid, msg_ordered)
     os.Exit(0)
+}
+
+func shouldSkipDatacenter(datacenter string, skipList []string) bool {
+    for _, skip := range skipList {
+        if datacenter == skip {
+            return true
+        }
+    }
+    return false
 }
 
 func sendTelegramMsg(botToken, chatID, message string) error {
