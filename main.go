@@ -31,11 +31,17 @@ var (
     autopay     = os.Getenv("AUTOPAY")          // Whether to enable autopay, e.g., true
 	frequency	= os.Getenv("FREQUENCY")		// Check frequency in seconds, e.g., 5
     skippedDatacenters = os.Getenv("SKIPPED_DATACENTERS") // Datacenters to skip, e.g., bhs,gra
+    checkCatalog = os.Getenv("CHECK_CATALOG")   // Whether to check the catalog, e.g., true
 )
 
 var bought = false                              // Whether the purchase has been made, to prevent errors with os.Exit(0)
 
 func runTask() {
+    checkCatalogValue, err := strconv.ParseBool(checkCatalog)
+    if err != nil {
+        fmt.Println("CHECK_CATALOG value is invalid:", err)
+        return
+    }
 
     client, err := ovh.NewClient(region, appKey, appSecret, consumerKey)
     if err != nil {
@@ -93,6 +99,49 @@ func runTask() {
         log.Println("No record to buy")
         return
     }
+
+    if checkCatalogValue {
+        log.Println("Checking catalog for availability...")
+        url := fmt.Sprintf("https://eu.api.ovh.com/v1/order/catalog/public/eco?ovhSubsidiary=%s", zone)
+        resp, err := http.Get(url)
+        if err != nil {
+            log.Printf("Failed to fetch catalog: %v\n", err)
+            return
+        }
+        defer resp.Body.Close()
+    
+        if resp.StatusCode != http.StatusOK {
+            log.Printf("Received non-OK status from catalog API: %s\n", resp.Status)
+            return
+        }
+    
+        var catalogData struct {
+            Plans []struct {
+                PlanCode string `json:"planCode"`
+            } `json:"plans"`
+        }
+    
+        err = json.NewDecoder(resp.Body).Decode(&catalogData)
+        if err != nil {
+            log.Printf("Failed to decode catalog response: %v\n", err)
+            return
+        }
+    
+        foundInCatalog := false
+        for _, plan := range catalogData.Plans {
+            if plan.PlanCode == plancode {
+                foundInCatalog = true
+                break
+            }
+        }
+    
+        if !foundInCatalog {
+            log.Printf("PlanCode %s not found in the catalog, stopping execution.\n", plancode)
+            return
+        }
+    
+        log.Printf("PlanCode %s is found in the catalog. Proceeding to the next steps.\n", plancode)
+    }    
 
     msg_available := fmt.Sprintf("🔥 Available: %s in %s region", plancode, datacenter)
     sendTelegramMsg(tgtoken, tgchatid, msg_available)
