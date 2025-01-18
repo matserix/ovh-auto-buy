@@ -27,9 +27,10 @@ var (
     tgchatid    = os.Getenv("TG_CHATID")		// The Telegram Chat ID where you want to send messages
     zone        = os.Getenv("ZONE")				// OVH subsidiary region setting, e.g., IE
     plancode    = os.Getenv("PLANCODE")         // The planCode for the product you need to purchase, e.g., 25skleb01
+    itemFQN     = os.Getenv("FQN") // The FQN for  the product (will be used instead of planCode)
     optionsenv  = os.Getenv("OPTIONS")          // Selected configurations, comma-separated, e.g., bandwidth-300-25skle,ram-32g-ecc-2400-25skle,softraid-2x450nvme-25skle
     autopay     = os.Getenv("AUTOPAY")          // Whether to enable autopay, e.g., true
-	frequency	= os.Getenv("FREQUENCY")		// Check frequency in seconds, e.g., 5
+    frequency	= os.Getenv("FREQUENCY")		// Check frequency in seconds, e.g., 5
     skippedDatacenters = os.Getenv("SKIPPED_DATACENTERS") // Datacenters to skip, e.g., bhs,gra
     checkCatalog = os.Getenv("CHECK_CATALOG")   // Whether to check the catalog, e.g., true
 )
@@ -61,7 +62,7 @@ func runTask() {
     var fqn, planCode, datacenter string
 
     for _, item := range result {
-        if item["planCode"] == plancode {
+        if item["fqn"] == itemFQN || item["planCode"] == plancode {
             fqn = item["fqn"].(string)
             planCode = item["planCode"].(string)
             datacenters := item["datacenters"].([]interface{})
@@ -228,7 +229,7 @@ func runTask() {
     }
 
     fmt.Println("Add options")
-    options := strings.Split(optionsenv, ",")
+    options := strings.Split(optionsenv, ",") // TODO: Use fqn and split by .
 
     itemIDInt, _ := strconv.Atoi(itemID)
     for _, option := range options {
