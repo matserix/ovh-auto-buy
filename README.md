@@ -32,15 +32,18 @@ services:
     image: katorly/ovh-auto-buy:latest
     container_name: ks-buy
     environment:
-      APP_KEY: "ovh_appkey"             # OVH的应用key
-      APP_SECRET: "ovh_appsecret"       # OVH的应用secret
-      CONSUMER_KEY: "ovh_consumerkey"   # OVH的消费者key
-      REGION: "ovh_region"              # 区域设置为, e.g. ovh-eu
-      TG_TOKEN: "telegram_bot_token"    # 你的Telegram Bot Token
-      TG_CHATID: "telegram_your_chatid" # 你希望发送消息的Telegram Chat ID
-      ZONE: "ovh_zone"                  # OVH子公司区域设置, e.g. IE
-      PLANCODE: "product_plancode"      # 需要购买的产品的planCode, e.g. 25skleb01
-      OPTIONS: "product_options"        # 选择的配置, e.g. bandwidth-300-25skle,ram-32g-ecc-2400-25skle,softraid-2x450nvme-25skle
-      AUTOPAY: true                     # 是否自动支付, e.g. true
-      FREQUENCY: 5                      # 检查频率单位为秒, e.g. 5
+      APP_KEY: "ovh_appkey"                          # OVH Application Key
+      APP_SECRET: "ovh_appsecret"                    # OVH Application Secret
+      CONSUMER_KEY: "ovh_consumerkey"                # OVH Consumer Key
+      REGION: "ovh_region"                           # Region setting, e.g., ovh-eu
+      TG_TOKEN: "telegram_bot_token"                 # Your Telegram Bot Token
+      TG_CHATID: "telegram_your_chatid"              # The Telegram Chat ID where you want to send messages
+      ZONE: "ovh_zone"                               # OVH subsidiary region setting, e.g., IE
+      PLANCODE: "product_plancode"                   # The planCode for the product you need to purchase, e.g., 25skleb01
+      FQN: "fqn"                                     # The FQN for  the product (will be used instead of planCode)
+      OPTIONS: "product_options"                     # Selected configurations, comma-separated, e.g., bandwidth-300-25skle,ram-32g-ecc-2400-25skle,softraid-2x450nvme-25skle
+      AUTOPAY: true                                  # Whether to enable autopay, e.g., true
+      SKIPPED_DATACENTERS: "skipped_datacenters"     # Datacenters to skip, comma-separated, e.g., bhs,gra
+      CHECK_CATALOG: true                            # Whether to check the catalog, e.g., true
+      FREQUENCY: 5                                   # Whether to check the catalog, e.g., true
 ```
