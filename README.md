@@ -22,14 +22,14 @@ docker run -e APP_KEY="ovh_appkey" \
            -e OPTIONS="product_options" \
            -e AUTOPAY=true \
            -e FREQUENCY=5 \
-           katorly/ovh-auto-buy:latest
+           matserix/ovh-auto-buy:latest
 ```
 
 ## docker-compose.yml
 ```yaml
 services:
   auto-buy:
-    image: katorly/ovh-auto-buy:latest
+    image: matserix/ovh-auto-buy:latest
     container_name: ks-buy
     environment:
       APP_KEY: "ovh_appkey"                          # OVH Application Key
