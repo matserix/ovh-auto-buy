@@ -19,23 +19,23 @@ import (
 )
 
 var (
-    appKey      = os.Getenv("APP_KEY")			// OVH Application Key
-    appSecret   = os.Getenv("APP_SECRET")		// OVH Application Secret
-    consumerKey = os.Getenv("CONSUMER_KEY")		// OVH Consumer Key
-    region      = os.Getenv("REGION")			// Region setting, e.g., ovh-eu
-    tgtoken     = os.Getenv("TG_TOKEN")			// Your Telegram Bot Token
-    tgchatid    = os.Getenv("TG_CHATID")		// The Telegram Chat ID where you want to send messages
-    zone        = os.Getenv("ZONE")				// OVH subsidiary region setting, e.g., IE
-    plancode    = os.Getenv("PLANCODE")         // The planCode for the product you need to purchase, e.g., 25skleb01
-    itemFQN     = os.Getenv("FQN") // The FQN for  the product (will be used instead of planCode)
-    optionsenv  = os.Getenv("OPTIONS")          // Selected configurations, comma-separated, e.g., bandwidth-300-25skle,ram-32g-ecc-2400-25skle,softraid-2x450nvme-25skle
-    autopay     = os.Getenv("AUTOPAY")          // Whether to enable autopay, e.g., true
-    frequency	= os.Getenv("FREQUENCY")		// Check frequency in seconds, e.g., 5
+    appKey      = os.Getenv("APP_KEY")					  // OVH Application Key
+    appSecret   = os.Getenv("APP_SECRET")				  // OVH Application Secret
+    consumerKey = os.Getenv("CONSUMER_KEY")				  // OVH Consumer Key
+    region      = os.Getenv("REGION")			          // Region setting, e.g., ovh-eu
+    tgtoken     = os.Getenv("TG_TOKEN")			          // Your Telegram Bot Token
+    tgchatid    = os.Getenv("TG_CHATID")		          // The Telegram Chat ID where you want to send messages
+    zone        = os.Getenv("ZONE")				          // OVH subsidiary region setting, e.g., IE
+    plancode    = os.Getenv("PLANCODE")                   // The planCode for the product you need to purchase, e.g., 25skleb01
+    itemFQN     = os.Getenv("FQN")                        // The FQN for  the product (will be used instead of planCode)
+    optionsenv  = os.Getenv("OPTIONS")                    // Selected configurations, comma-separated, e.g., bandwidth-300-25skle,ram-32g-ecc-2400-25skle,softraid-2x450nvme-25skle
+    autopay     = os.Getenv("AUTOPAY")                    // Whether to enable autopay, e.g., true
+    frequency	= os.Getenv("FREQUENCY")				  // Check frequency in seconds, e.g., 5
     skippedDatacenters = os.Getenv("SKIPPED_DATACENTERS") // Datacenters to skip, e.g., bhs,gra
-    checkCatalog = os.Getenv("CHECK_CATALOG")   // Whether to check the catalog, e.g., true
+    checkCatalog = os.Getenv("CHECK_CATALOG")   		  // Whether to check the catalog, e.g., true
 )
 
-var bought = false                              // Whether the purchase has been made, to prevent errors with os.Exit(0)
+var bought = false                              		  // Whether the purchase has been made, to prevent errors with os.Exit(0)
 
 func runTask() {
     checkCatalogValue, err := strconv.ParseBool(checkCatalog)
