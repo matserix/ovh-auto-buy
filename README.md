@@ -45,5 +45,5 @@ services:
       AUTOPAY: true                                  # Whether to enable autopay, e.g., true
       SKIPPED_DATACENTERS: "skipped_datacenters"     # Datacenters to skip, comma-separated, e.g., bhs,gra
       CHECK_CATALOG: true                            # Whether to check the catalog, e.g., true
-      FREQUENCY: 5                                   # Whether to check the catalog, e.g., true
+      FREQUENCY: 5                                   # Check frequency in seconds, e.g., 5
 ```
